@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:dio/dio.dart';
+import 'dart:convert';
+import 'info_list.dart';
+import 'tab_info.dart';
+import 'package:http/http.dart' as http;
 
 void main() => runApp(new Main());
 
@@ -24,26 +27,27 @@ class StatefulTabBar extends StatefulWidget {
 
 class TabBarState extends State<StatefulTabBar> {
   int mIndex = 0;
-  static const List<Widget> _widgetOptions = [
-    Icon(Icons.archive),
-    Icon(Icons.search),
-    Icon(Icons.person),
-  ];
+  List<Widget> _widgetOptions = [];
+
+  TabBarState() {
+    _widgetOptions.add(InfoTab(mInfoList: fetchInfo()));
+    _widgetOptions.add(Icon(Icons.search));
+    _widgetOptions.add(Icon(Icons.person));
+  }
 
   void onItemTapped(int index) {
     setState(() {
       mIndex = index;
     });
-    testHttp(index);
   }
 
-  void testHttp(int index) async {
-    try {
-      Response response = await Dio().get("http://zhangshaoru.pythonanywhere.com/?format=json");
-      print(response);
-    } catch (e) {
-      print(e);
-    }
+  Future<InfoList> fetchInfo() async {
+    // mark not callback in Dio
+//    final response = await Dio().get("http://zhangshaoru.pythonanywhere.com/sinfos/?format=json");
+
+    final response = await http.get("http://zhangshaoru.pythonanywhere.com/sinfos/?format=json");
+    print('[Sinfo] response : ' + response.body);
+    return InfoList.fromJson(jsonDecode(response.body));
   }
 
   @override
