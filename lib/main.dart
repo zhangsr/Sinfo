@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'info_list.dart';
 import 'tab_info.dart';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 
 void main() => runApp(new Main());
 
@@ -52,9 +53,13 @@ class TabBarState extends State<StatefulTabBar> {
 
   @override
   Widget build(BuildContext context) {
+    var now = new DateTime.now();
+    var formatter = new DateFormat('M月dd日');
+    String formatted = formatter.format(now);
+
     return Scaffold(
         appBar: AppBar(
-          title: Text('Sinfo'),
+          title: Text(formatted),
         ),
         body: Center(
           child: _widgetOptions.elementAt(mIndex),
