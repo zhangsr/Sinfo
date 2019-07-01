@@ -48,7 +48,9 @@ class TabBarState extends State<StatefulTabBar> {
 
     final response = await http.get("http://zhangshaoru.pythonanywhere.com/sinfos/?format=json");
     print('[Sinfo] response : ' + response.body);
-    return InfoList.fromJson(jsonDecode(response.body));
+    // find out decoder problem
+    Utf8Decoder utf8decoder = new Utf8Decoder();
+    return InfoList.fromJson(jsonDecode(utf8decoder.convert(response.bodyBytes)));
   }
 
   @override
