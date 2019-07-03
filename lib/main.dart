@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'dart:convert';
+import 'info.dart';
 import 'info_list.dart';
+import 'db.dart';
 import 'tab_info.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
@@ -43,14 +45,29 @@ class TabBarState extends State<StatefulTabBar> {
   }
 
   Future<InfoList> fetchInfo() async {
-    // mark not callback in Dio
-//    final response = await Dio().get("http://zhangshaoru.pythonanywhere.com/sinfos/?format=json");
+    var db = new DB();
+    List<Info> infos = await db.infos(date : getTodayDate());
+    if (infos.length > 0) {
+      print('[Sinfo] load from db');
+      return new InfoList(infoList: infos);
+    } else {
+      print('[Sinfo] load from network');
+      final response = await http.get("http://zhangshaoru.pythonanywhere.com/sinfos/?format=json");
+      print('[Sinfo] response : ' + response.body);
+      // find out decoder problem
+      Utf8Decoder utf8decoder = new Utf8Decoder();
+      var infoList = InfoList.fromJson(jsonDecode(utf8decoder.convert(response.bodyBytes)));
+      for (int i = 0; i < infoList.infoList.length; i++) {
+        db.insertInfo(infoList.infoList[i]);
+      }
+      return infoList;
+    }
+  }
 
-    final response = await http.get("http://zhangshaoru.pythonanywhere.com/sinfos/?format=json");
-    print('[Sinfo] response : ' + response.body);
-    // find out decoder problem
-    Utf8Decoder utf8decoder = new Utf8Decoder();
-    return InfoList.fromJson(jsonDecode(utf8decoder.convert(response.bodyBytes)));
+  String getTodayDate() {
+    var now = new DateTime.now();
+    var formatter = new DateFormat('yyyyMMdd');
+    return formatter.format(now);
   }
 
   @override
