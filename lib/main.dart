@@ -85,9 +85,9 @@ class TabBarState extends State<StatefulTabBar> {
         ),
         bottomNavigationBar: BottomNavigationBar(
           items: const <BottomNavigationBarItem>[
-            BottomNavigationBarItem(icon: Icon(Icons.archive), title: Text('Info')),
-            BottomNavigationBarItem(icon: Icon(Icons.search), title: Text('Discover')),
-            BottomNavigationBarItem(icon: Icon(Icons.person), title: Text('User')),
+            BottomNavigationBarItem(icon: Icon(Icons.view_list), title: Text('订阅')),
+            BottomNavigationBarItem(icon: Icon(Icons.search), title: Text('发现')),
+            BottomNavigationBarItem(icon: Icon(Icons.person), title: Text('我的')),
           ],
           onTap: onItemTapped,
           currentIndex: mIndex,

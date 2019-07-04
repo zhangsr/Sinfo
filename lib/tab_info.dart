@@ -29,13 +29,11 @@ class InfoTab extends StatelessWidget {
     for (int i = 0; i < snapshot.data.infoList.length; i++) {
       widgets.add(
         Padding(
-            padding: EdgeInsets.all(10.0),
+            padding: EdgeInsets.only(top: 4, bottom: 4),
             child: ListTile(
               title: Text(
-                (i + 1).toString() +
-                    '. ' +
-                    snapshot.data.infoList.elementAt(i).title,
-                style: TextStyle(fontSize: 18),
+                snapshot.data.infoList.elementAt(i).title,
+                style: TextStyle(fontSize: 16),
               ),
               trailing: Icon(Icons.keyboard_arrow_right),
               onTap: () {
